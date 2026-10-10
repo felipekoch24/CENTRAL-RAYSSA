@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTRAL ELITE - RAYSSA 🌸</title>
+
+    <!-- PWA / Ícones Android e iPhone -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d0d0d">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="shortcut icon" href="icon.png" type="image/png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Radar Rayssa">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <!-- Estilos CSS Externo -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- ABA 1: EXTRAS -->
+    <div id="aba-extras" class="tab-content active">
+        <div class="card">
+            <h1>EXTRAS 💰</h1>
+            <div class="card-input">
+                <label>Salário Bruto (Carteira)</label>
+                <input type="text" id="bruto" value="R$ 1.800,00" oninput="formatarMoedaInput(this); calcularExtras();">
+            </div>
+            <label style="font-size: 11px; color: var(--text-gray); display: block; text-align: center; margin-bottom: 5px;">DIAS DE FÉRIAS</label>
+            <div class="ferias-selector">
+                <div class="ferias-opt" id="f10" onclick="setFerias(10)">10d</div>
+                <div class="ferias-opt" id="f15" onclick="setFerias(15)">15d</div>
+                <div class="ferias-opt active" id="f20" onclick="setFerias(20)">20d</div>
+                <div class="ferias-opt" id="f30" onclick="setFerias(30)">30d</div>
+            </div>
+            <div class="item-valor"><span>13º (1ª Parcela):</span> <span id="p1">R$ 0,00</span></div>
+            <div class="item-valor"><span>13º (2ª Parcela):</span> <span id="p2">R$ 0,00</span></div>
+            <div class="item-valor"><span>Férias (+1/3):</span> <span id="fer">R$ 0,00</span></div>
+            <div class="total-destaque">TOTAL NO ANO: <span id="total-extras">R$ 0,00</span></div>
+        </div>
+    </div>
+
+    <!-- ABA 2: RADAR 5º DIA ÚTIL -->
+    <div id="aba-radar" class="tab-content">
+        <div class="card">
+            <h1>RADAR 5º DIA ÚTIL</h1>
+            <div id="radar-card-main" class="radar-card radar-normal">
+                <div style="font-size: 11px; font-weight: bold;" id="radar-label">FALTAM PARA O PAGAMENTO</div>
+                <div id="radar-dias" class="radar-dias">--</div>
+            </div>
+            <div id="radar-status" style="font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 10px;">SINCRONIZANDO...</div>
+            <div id="radar-frase" class="frase-motivacao">"O SUCESSO COMEÇA COM A DECISÃO DE TENTAR."</div>
+            <button style="background: #333; color: #fff;" onclick="alertaGasto()">QUERO COMPRAR ALGO</button>
+            <button style="background: #222; color: #777; font-size: 11px;" onclick="atualizarRadar()">atualizar status</button>
+        </div>
+    </div>
+
+    <!-- ABA 3: CONTROLE DE DÍVIDAS -->
+    <div id="aba-dividas" class="tab-content">
+        <div class="card">
+            <h1>CONTROLE ELITE</h1>
+            <label style="font-size: 10px; color: var(--text-gray);">SALÁRIO ATUAL</label>
+            <input type="text" id="salario-divida" style="font-size: 22px; font-weight: bold; text-align: center; color: #50fa7b;" placeholder="R$ 0,00" oninput="formatarSalarioDivida(this)">
+            <div id="resumo-divida" style="font-size: 13px; margin: 10px 0; text-align: center;"></div>
+            
+            <div style="background: #121212; padding: 10px; border-radius: 8px; border-left: 3px solid #ffd600; font-size: 11px; margin-bottom: 10px;">
+                🔓 FIM DAS DÍVIDAS: <span id="data-vitoria" style="color: #fff; font-weight: bold;">---</span><br>
+                Dívida Total: <span id="total-divida" style="color: #ff5252;">R$ 0,00</span>
+            </div>
+
+            <input type="text" id="gasto-nome" placeholder="Nome da Conta">
+            <input type="text" id="gasto-valor" placeholder="R$ 0,00" oninput="formatarMoedaInput(this)">
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="gasto-dia" placeholder="Dia Venc.">
+                <input type="number" id="gasto-faltam" placeholder="Meses rest.">
+            </div>
+            <button style="background: var(--primary-dark);" onclick="addGastoDivida()">+ Adicionar Conta</button>
+
+            <div class="tabela-container" style="margin-top: 10px;">
+                <table id="tabelaDividas">
+                    <thead><tr><th>Dia</th><th>Conta</th><th>Restam</th><th>Valor</th><th>Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button style="background: #222; color: #777; font-size: 10px;" onclick="delGastoSelecionado()">Apagar Selecionado</button>
+        </div>
+    </div>
+
+    <!-- ABA 4: LISTAS DA LINDA -->
+    <div id="aba-listas" class="tab-content">
+        <div class="card">
+            <h1>LISTAS DA LINDA 🌸</h1>
+            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
+                <input type="text" id="nova-cat" placeholder="Nova Categoria (Ex: Mercado)">
+                <button style="width: 100px; background: var(--primary);" onclick="addCat()">Criar</button>
+            </div>
+            <div id="container-listas"></div>
+        </div>
+    </div>
+
+    <!-- ABA 5: FLUXO FINANCEIRO DETALHADO -->
+    <div id="aba-fluxo" class="tab-content">
+        <div class="card">
+            <h1>FINANÇAS GERAIS 🌸</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; text-align: center;">
+                <div style="background: #2a1215; padding: 10px; border-radius: 8px; color: #ff5252; font-size: 12px;">Pagar<br><strong id="fluxo-devo">R$ 0,00</strong></div>
+                <div style="background: #122a15; padding: 10px; border-radius: 8px; color: #50fa7b; font-size: 12px;">Receber<br><strong id="fluxo-receber">R$ 0,00</strong></div>
+            </div>
+
+            <input type="text" id="fluxo-desc" placeholder="Descrição (Ex: Aluguel)">
+            <input type="text" id="fluxo-vparc" placeholder="Valor Parcela (R$ 0,00)" oninput="formatarMoedaInput(this)">
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="fluxo-qtd" placeholder="Qtd Parc">
+                <input type="number" id="fluxo-dia" placeholder="Dia">
+            </div>
+            <select id="fluxo-tipo">
+                <option value="devo">Vou Pagar</option>
+                <option value="receber">Vou Receber</option>
+            </select>
+            <button style="background: var(--primary);" onclick="addFluxoItem()">Adicionar Item</button>
+
+            <div class="tabela-container" style="margin-top: 10px;">
+                <table id="tabelaFluxo">
+                    <thead><tr><th>Descrição</th><th>Venc</th><th>Valor</th><th>Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE ABAS INFERIOR -->
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="trocarAba(event, 'aba-extras')"><span>💰</span>Extras</button>
+        <button class="tab-btn" onclick="trocarAba(event, 'aba-radar')"><span>⏳</span>Radar</button>
+        <button class="tab-btn" onclick="trocarAba(event, 'aba-dividas')"><span>📊</span>Dívidas</button>
+        <button class="tab-btn" onclick="trocarAba(event, 'aba-listas')"><span>📝</span>Listas</button>
+        <button class="tab-btn" onclick="trocarAba(event, 'aba-fluxo')"><span>🌸</span>Fluxo</button>
+    </nav>
+
+</div>
+
+<!-- Script JavaScript Externo -->
+<script src="script.js"></script>
+</body>
+          </html>
+          
