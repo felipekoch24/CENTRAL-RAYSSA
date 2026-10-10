@@ -1,7 +1,7 @@
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open('rayssa-app-v1').then(cache => {
-      return cache.addAll(['./', './index.html', './manifest.json', './icon.png']);
+    caches.open('rayssa-app-v2').then(cache => {
+      return cache.addAll(['./', './index.html', './style.css', './script.js', './manifest.json', './icon.png']);
     })
   );
 });
