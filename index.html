@@ -118,7 +118,7 @@
                 <input type="number" id="fluxo-dia" placeholder="Dia">
             </div>
             <select id="fluxo-tipo">
-                <option value="devo">Vou Pagar</option>
+                <option value="devo">Vou Pagar</a>
                 <option value="receber">Vou Receber</option>
             </select>
             <button style="background: var(--primary);" onclick="addFluxoItem()">Adicionar Item</button>
@@ -132,6 +132,20 @@
         </div>
     </div>
 
+    <!-- ABA 6: RECEITAS DA RAYSSA -->
+    <div id="aba-receitas" class="tab-content">
+        <div class="card">
+            <h1>RECEITAS DA RAYSSA 👩‍🍳</h1>
+            <input type="text" id="receita-titulo" placeholder="Nome da Receita (Ex: Bolo de Chocolate)">
+            <textarea id="receita-ingredientes" placeholder="Ingredientes (um por linha ou do seu jeito)..." style="width: 100%; height: 70px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 6px; padding: 8px; margin-bottom: 8px; resize: none; font-family: inherit; font-size: 13px;"></textarea>
+            <textarea id="receita-modo" placeholder="Modo de Preparo..." style="width: 100%; height: 90px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 6px; padding: 8px; margin-bottom: 10px; resize: none; font-family: inherit; font-size: 13px;"></textarea>
+            
+            <button style="background: var(--primary);" onclick="addReceita()">+ Salvar Receita</button>
+
+            <div id="container-receitas" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
     <!-- BARRA DE ABAS INFERIOR -->
     <nav class="nav-tabs">
         <button class="tab-btn active" onclick="trocarAba(event, 'aba-extras')"><span>💰</span>Extras</button>
@@ -139,6 +153,7 @@
         <button class="tab-btn" onclick="trocarAba(event, 'aba-dividas')"><span>📊</span>Dívidas</button>
         <button class="tab-btn" onclick="trocarAba(event, 'aba-listas')"><span>📝</span>Listas</button>
         <button class="tab-btn" onclick="trocarAba(event, 'aba-fluxo')"><span>🌸</span>Fluxo</button>
+        <button class="tab-btn" onclick="trocarAba(event, 'aba-receitas')"><span>👩‍🍳</span>Receitas</button>
     </nav>
 
 </div>
@@ -146,5 +161,5 @@
 <!-- Script JavaScript Externo -->
 <script src="script.js"></script>
 </body>
-          </html>
-          
+            </html>
+            
