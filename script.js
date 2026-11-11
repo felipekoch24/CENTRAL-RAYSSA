@@ -278,4 +278,103 @@ atualizarRadar();
 renderDividas();
 renderListas();
 renderFluxo();
+// --- ABA 6: RECEITAS DA RAYSSA ---
+let receitasData = JSON.parse(localStorage.getItem('central_receitas')) || [];
+
+function addReceita() {
+    const titulo = document.getElementById('receita-titulo').value.trim();
+    const ingredientes = document.getElementById('receita-ingredientes').value.trim();
+    const modo = document.getElementById('receita-modo').value.trim();
+    
+    if (!titulo) {
+        alert("Preencha pelo menos o nome da receita!");
+        return;
+    }
+
+    receitasData.push({
+        id: Date.now(),
+        titulo: titulo,
+        ingredientes: ingredientes,
+        modo: modo
+    });
+
+    document.getElementById('receita-titulo').value = '';
+    document.getElementById('receita-ingredientes').value = '';
+    document.getElementById('receita-modo').value = '';
+    
+    salvarReceitas();
+}
+
+function salvarReceitas() {
+    localStorage.setItem('central_receitas', JSON.stringify(receitasData));
+    renderReceitas();
+}
+
+function delReceita(id) {
+    if (confirm("Tem certeza que deseja apagar esta receita?")) {
+        receitasData = receitasData.filter(r => r.id !== id);
+        salvarReceitas();
+    }
+}
+
+function habilitarEdicaoReceita(id) {
+    const cardEl = document.getElementById(`receita-card-${id}`);
+    const rec = receitasData.find(r => r.id === id);
+    if (!rec || !cardEl) return;
+
+    cardEl.innerHTML = `
+        <input type="text" id="edit-titulo-${id}" value="${rec.titulo}" style="margin-bottom: 6px; font-weight: bold;">
+        <textarea id="edit-ingredientes-${id}" style="width: 100%; height: 70px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 6px; padding: 8px; margin-bottom: 6px; resize: none; font-family: inherit; font-size: 13px;">${rec.ingredientes}</textarea>
+        <textarea id="edit-modo-${id}" style="width: 100%; height: 90px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 6px; padding: 8px; margin-bottom: 8px; resize: none; font-family: inherit; font-size: 13px;">${rec.modo}</textarea>
+        <div style="display: flex; gap: 5px;">
+            <button style="background: #50fa7b; color: #000; font-weight: bold;" onclick="salvarEdicaoReceita(${id})">Salvar</button>
+            <button style="background: #333; color: #fff;" onclick="renderReceitas()">Cancelar</button>
+        </div>
+    `;
+}
+
+function salvarEdicaoReceita(id) {
+    const novoTitulo = document.getElementById(`edit-titulo-${id}`).value.trim();
+    const novosIngredientes = document.getElementById(`edit-ingredientes-${id}`).value.trim();
+    const novoModo = document.getElementById(`edit-modo-${id}`).value.trim();
+
+    if (!novoTitulo) {
+        alert("O nome da receita não pode ficar vazio!");
+        return;
+    }
+
+    const rec = receitasData.find(r => r.id === id);
+    if (rec) {
+        rec.titulo = novoTitulo;
+        rec.ingredientes = novosIngredientes;
+        rec.modo = novoModo;
+        salvarReceitas();
+    }
+}
+
+function renderReceitas() {
+    const container = document.getElementById('container-receitas');
+    if (!container) return;
+    container.innerHTML = '';
+
+    receitasData.forEach(r => {
+        container.innerHTML += `
+            <div id="receita-card-${r.id}" style="background: #121212; border: 1px solid #222; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                    <b style="color: var(--primary); font-size: 14px;">${r.titulo}</b>
+                    <div style="display: flex; gap: 4px;">
+                        <button style="width: auto; background: none; color: #7aa2f7; font-size: 11px; padding: 2px 6px;" onclick="habilitarEdicaoReceita(${r.id})">✏️ Editar</button>
+                        <button style="width: auto; background: none; color: #ff5252; font-size: 11px; padding: 2px 6px;" onclick="delReceita(${r.id})">🗑️ Apagar</button>
+                    </div>
+                </div>
+                ${r.ingredientes ? `<div style="font-size: 12px; color: #ccc; margin-bottom: 6px; white-space: pre-wrap;"><strong>Ingredientes:</strong><br>${r.ingredientes}</div>` : ''}
+                ${r.modo ? `<div style="font-size: 12px; color: #aaa; white-space: pre-wrap;"><strong>Preparo:</strong><br>${r.modo}</div>` : ''}
+            </div>
+        `;
+    });
+}
+
+// Inicialização da aba de receitas
+renderReceitas();
+
                                
